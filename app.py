@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from sentence_transformers import SentenceTransformer, util
 from starlette.responses import RedirectResponse
 import torch
-import fasttext
+# import fasttext
 
 
 # Initialize logger with specified log level
@@ -77,9 +77,9 @@ def load_artifacts():
       logger.info("Model loaded to CPU")
 
 
-    model_path = "models/fasttext"
-    logger.info("Model path: %s", model_path)
-    app.state.fasttext = fasttext.load_model(os.path.join(model_path, "lid.176.ftz"))
+    # model_path = "models/fasttext"
+    # logger.info("Model path: %s", model_path)
+    # app.state.fasttext = fasttext.load_model(os.path.join(model_path, "lid.176.ftz"))
 
     logger.info("Model loaded successfully")
 
@@ -110,46 +110,46 @@ def get_cosine_similarity(sentence1: str, sentence2: str):
             status_code=500, detail=f"Error calculating cosine similarity: {str(e)}"
         )
 
-@app.post(
-    "/detect",
-    tags=["Language Detection"],
-    summary="Detect the language of the input text",
-)
-async def detect_language(text: str):
-    """
-    Endpoint to detect the language of the input text using the 'fasttext' model.
-    Args:
-        request (Request): Raw request payload containing the input text.
-    Returns:
-        dict: Detection response containing language information.
-    Raises:
-        HTTPException: If an error occurs during language detection, return a 400 or 500 response.
-    """
-    try:
-        if not text:
-            raise HTTPException(
-                status_code=400, detail="Input text cannot be empty."
-            )
+# @app.post(
+#     "/detect",
+#     tags=["Language Detection"],
+#     summary="Detect the language of the input text",
+# )
+# async def detect_language(text: str):
+#     """
+#     Endpoint to detect the language of the input text using the 'fasttext' model.
+#     Args:
+#         request (Request): Raw request payload containing the input text.
+#     Returns:
+#         dict: Detection response containing language information.
+#     Raises:
+#         HTTPException: If an error occurs during language detection, return a 400 or 500 response.
+#     """
+#     try:
+#         if not text:
+#             raise HTTPException(
+#                 status_code=400, detail="Input text cannot be empty."
+#             )
 
-        labels, scores = app.state.fasttext.predict(text)
-        label = labels[0].replace("__label__", "")
-        score = min(float(scores[0]), 1.0)
+#         labels, scores = app.state.fasttext.predict(text)
+#         label = labels[0].replace("__label__", "")
+#         score = min(float(scores[0]), 1.0)
 
-        return {
-            "text": text,
-            "lang": label,
-            "score": score,
-        }
-    except ValueError as ve:
-        logger.error(f"ValueError during language detection: {ve}")
-        raise HTTPException(
-            status_code=400, detail=f"Invalid input: {str(ve)}"
-        )
-    except Exception as e:
-        logger.error(f"Error occurred during language detection: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"Error occurred during language detection: {str(e)}"
-        )
+#         return {
+#             "text": text,
+#             "lang": label,
+#             "score": score,
+#         }
+#     except ValueError as ve:
+#         logger.error(f"ValueError during language detection: {ve}")
+#         raise HTTPException(
+#             status_code=400, detail=f"Invalid input: {str(ve)}"
+#         )
+#     except Exception as e:
+#         logger.error(f"Error occurred during language detection: {e}")
+#         raise HTTPException(
+#             status_code=500, detail=f"Error occurred during language detection: {str(e)}"
+#         )
 
 @app.get(
     "/health",

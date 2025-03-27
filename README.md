@@ -4,7 +4,6 @@ This project provides tools and models for text analysis, including language det
 
 ## Features
 
-- **Language Detection**: Detects the language of a given text using the FastText model.
 - **Text Embedding**: Generates embeddings for text using Sentence Transformers.
 
 ## Requirements
@@ -14,12 +13,39 @@ This project provides tools and models for text analysis, including language det
 
 ## Installation
 
-1. **Clone the repository**:
+1. Clone the repository:
    ```bash
    git clone https://github.com/canturan13/text_analysis.git
    cd text_analysis
+	 ```
+
+### Using Poetry
+
+1. Install dependencies using Poetry:
+   ```bash
+	poetry install
+	 ```
+
+2. Activate the virtual environment:
+   ```bash
+	poetry shell
+	 ```
+
+3. Run the application:
+   ```bash
+	poetry run uvicorn app:app --host 0.0.0.0 --port 8000
+	 ```
+
+
+### Using Pip
+
+1. Install dependencies:
+
+	 ```bash
 	 pip install -r requirements.txt
-	 uvicorn app:app
-	 # or set host and port
+	 ```
+
+2. Run the application:
+	 ```bash
 	 uvicorn app:app --host 0.0.0.0 --port 8000
 	 ```
